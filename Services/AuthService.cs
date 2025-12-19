@@ -1,7 +1,6 @@
 ﻿using ProyectoFinalTecWeb.Entities.Dtos.Auth;
 using ProyectoFinalTecWeb.Entities.Dtos.DriverDto;
 using ProyectoFinalTecWeb.Entities.Dtos.PassengerDto;
-using ProyectoFinalTecWeb.Entities.Dtos.Auth;
 using ProyectoFinalTecWeb.Repositories;
 
 using Microsoft.Extensions.Configuration;
@@ -286,6 +285,27 @@ namespace ProyectoFinalTecWeb.Services
                 return token;
             }
             throw new Exception("Email not found");
+        }
+        //create ResetPasswordAsync method
+        public string ResetPasswordAsync(ResetPassword dto)
+        {
+            var token = dto.token;
+            if(token == null)
+            {
+                throw new Exception("Token must not be null");
+            }
+            else
+            {
+                var currenttime=Convert.ToBase64String(BitConverter.GetBytes((int)DateTime.UtcNow.Ticks));
+                var tokenint=Convert.ToInt16(token);
+                var currenttimeint=Convert.ToInt16(currenttime);
+                if (currenttimeint>tokenint+15)
+                {
+                    throw new Exception("It has past more than 15 minutes since token generation");
+                }
+                return dto.newPassword;
+               
+            }
         }
     }
 }
