@@ -287,7 +287,7 @@ namespace ProyectoFinalTecWeb.Services
             throw new Exception("Email not found");
         }
         //create ResetPasswordAsync method
-        public string ResetPasswordAsync(ResetPassword dto)
+        public async Task<string> ResetPasswordAsync(ResetPassword dto)
         {
             var token = dto.token;
             if(token == null)
@@ -304,6 +304,7 @@ namespace ProyectoFinalTecWeb.Services
                     throw new Exception("It has past more than 15 minutes since token generation");
                 }
                 return dto.newPassword;
+
                
             }
         }
