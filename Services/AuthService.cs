@@ -1,6 +1,7 @@
 ﻿using ProyectoFinalTecWeb.Entities.Dtos.Auth;
 using ProyectoFinalTecWeb.Entities.Dtos.DriverDto;
 using ProyectoFinalTecWeb.Entities.Dtos.PassengerDto;
+using ProyectoFinalTecWeb.Entities.Dtos.Auth;
 using ProyectoFinalTecWeb.Repositories;
 
 using Microsoft.Extensions.Configuration;
@@ -274,6 +275,17 @@ namespace ProyectoFinalTecWeb.Services
             // 64 bytes aleatorios en Base64Url
             var bytes = RandomNumberGenerator.GetBytes(64);
             return Base64UrlEncoder.Encode(bytes);
+        }
+        public async Task<string> ForgotPasswordAsync(string email)
+        {
+            // Buscar si es passenger
+            var passenger = await _passengers.GetByEmailAddress(email);
+            if (passenger != null)
+            {
+                var token = Convert.ToBase64String(BitConverter.GetBytes(DateTime.UtcNow.Ticks));
+                return token;
+            }
+            throw new Exception("Email not found");
         }
     }
 }
